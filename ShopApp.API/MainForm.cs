@@ -1,3 +1,4 @@
+// MainForm.cs
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -16,6 +17,8 @@ namespace ShopApp.API
             _storeService = storeService;
             _productService = productService;
             InitializeComponent();
+
+            // Привязка событий к кнопкам
             createStoreButton.Click += CreateStoreButton_Click;
             createProductButton.Click += CreateProductButton_Click;
             addStockButton.Click += AddStockButton_Click;
@@ -24,7 +27,7 @@ namespace ShopApp.API
             purchaseProductsButton.Click += PurchaseProductsButton_Click;
             findCheapestBatchStoreButton.Click += FindCheapestBatchStoreButton_Click;
         }
-        
+
         private void CreateStoreButton_Click(object sender, EventArgs e)
         {
             string name = Prompt.ShowDialog("Введите название магазина", "Создать магазин");
@@ -50,6 +53,7 @@ namespace ShopApp.API
             _productService.AddStockToStore(storeCode, productName, quantity, price);
             MessageBox.Show("Партия добавлена.");
         }
+
         private void FindCheapestStoreButton_Click(object sender, EventArgs e)
         {
             string productName = Prompt.ShowDialog("Введите название товара", "Найти дешевый магазин");
@@ -71,11 +75,14 @@ namespace ShopApp.API
             string result = "";
             foreach (var product in products)
             {
-                result += $"{product.ProductName}: {product.Quantity} шт.\n";
+                var storeInfo = product.Stores[storeCode]; 
+                result += $"{product.Name}: {storeInfo.Quantity} шт. по цене {storeInfo.Price}\n";
             }
 
             MessageBox.Show(result);
         }
+
+
         private void PurchaseProductsButton_Click(object sender, EventArgs e)
         {
             int storeCode = int.Parse(Prompt.ShowDialog("Введите код магазина", "Купить товары"));
@@ -111,6 +118,7 @@ namespace ShopApp.API
                     Quantity = int.Parse(parts[1].Trim())
                 });
             }
+
             var store = _productService.FindCheapestStoreForBatch(requests);
 
             if (store != null)

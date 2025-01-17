@@ -5,6 +5,12 @@ namespace ShopApp.DAL.Repositories
 {
     public class FileStoreRepository : IStoreRepository
     {
+        private readonly string _filePath;
+
+        public FileStoreRepository(string filePath)
+        {
+            _filePath = filePath;
+        }
         private readonly List<Store> _stores = new();
 
         public void AddStore(Store store)

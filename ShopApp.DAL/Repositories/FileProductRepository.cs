@@ -6,6 +6,12 @@ namespace ShopApp.DAL.Repositories
     public class FileProductRepository : IProductRepository
     {
         private readonly List<Product> _products = new();
+        private readonly string _filePath;
+
+        public FileProductRepository(string filePath)
+        {
+            _filePath = filePath;
+        }
 
         public void AddProduct(Product product)
         {
